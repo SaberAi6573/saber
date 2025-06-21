@@ -7,7 +7,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
-  body, .social-link, .social-link:hover, .social-link:focus {
+  body, .social-link, .social-link:hover, .social-link:focus, .social-icons a {
     cursor: none !important;
   }
 
@@ -15,7 +15,7 @@
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: url('https://cdn.discordapp.com/attachments/1051067118369652767/1096571155466424422/pinterestdownloader.com-1681513210.954071.gif?ex=685739f8&is=6855e878&hm=4996d9491819b597c0d04814f0a301798a002df493302b03257702373127f02c&.gif') no-repeat center center/cover;
+    background: url('https://cdn.discordapp.com/attachments/1051067118369652767/1096571155466424422/pinterestdownloader.com-1681513210.954071.gif') no-repeat center center/cover;
     overflow: hidden;
     font-family: 'Orbitron', sans-serif;
     color: #0ff;
@@ -85,24 +85,31 @@
     text-shadow: 0 0 20px #0ff;
   }
 
-  .social-link {
-    display: block;
-    margin: 10px 0;
-    padding: 12px 20px;
-    background: transparent;
+  .photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     border: 2px solid #0ff;
-    border-radius: 10px;
-    color: #0ff;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.3s;
-    box-shadow: 0 0 15px #0ff;
+    box-shadow: 0 0 20px #0ff;
+    margin: 0 auto 20px;
+    background: url('your-photo.jpg') no-repeat center center/cover;
   }
 
-  .social-link:hover, .social-link:focus {
-    background: #0ff;
-    color: #000;
-    transform: scale(1.1);
-    outline: none;
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .social-icons a img {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 0 10px #0ff);
+    transition: transform 0.3s;
+  }
+
+  .social-icons a img:hover {
+    transform: scale(1.2);
   }
 
   .fps {
@@ -135,8 +142,13 @@
 
 <div class="card" id="mainCard" tabindex="0">
   <h1>Welcome to My Domain</h1>
-  <a href="https://discord.com/yourdiscord" target="_blank" class="social-link" tabindex="1">Join my Discord</a>
-  <a href="https://instagram.com/yourinstagram" target="_blank" class="social-link" tabindex="2">Follow me on Instagram</a>
+  <div class="photo"></div>
+  <div class="social-icons">
+    <a href="https://discord.com/yourdiscord" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
+    <a href="https://instagram.com/yourinstagram" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+    <a href="https://youtube.com/yourchannel" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+    <a href="https://x.com/yourhandle" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" alt="Twitter/X"></a>
+  </div>
 </div>
 
 <script>
@@ -144,28 +156,6 @@ const cursor = document.getElementById('cursor');
 document.addEventListener('mousemove', e => {
   cursor.style.left = e.pageX + 'px';
   cursor.style.top = e.pageY + 'px';
-});
-
-// Sparkle click effect
-document.addEventListener('click', e => {
-  const sparkle = document.createElement('div');
-  sparkle.style.position = 'absolute';
-  sparkle.style.width = '15px';
-  sparkle.style.height = '15px';
-  sparkle.style.borderRadius = '50%';
-  sparkle.style.background = '#0ff';
-  sparkle.style.left = e.pageX + 'px';
-  sparkle.style.top = e.pageY + 'px';
-  sparkle.style.opacity = 1;
-  sparkle.style.transition = 'all 0.6s ease';
-  document.body.appendChild(sparkle);
-  setTimeout(() => {
-    sparkle.style.transform = 'scale(3)';
-    sparkle.style.opacity = 0;
-  }, 10);
-  setTimeout(() => {
-    document.body.removeChild(sparkle);
-  }, 600);
 });
 
 // FPS Counter
