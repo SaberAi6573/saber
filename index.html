@@ -137,7 +137,7 @@
 <div class="fps" id="fpsCounter">FPS: --</div>
 
 <div class="start-screen" id="startScreen">
-  <div class="start-text">Press ENTER to Start</div>
+  <div class="start-text">Press ENTER or Click to Start</div>
 </div>
 
 <div class="card" id="mainCard" tabindex="0">
@@ -170,13 +170,21 @@ function updateFPS() {
 }
 updateFPS();
 
-// Press Start text hide on ENTER
+// Function to hide start screen and show main card
+function startExperience() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('mainCard').style.display = 'block';
+  document.getElementById('mainCard').focus();
+}
+
+// Press Start text hide on ENTER or Mouse Click
 window.addEventListener('keydown', (e) => {
   if(e.key === 'Enter') {
-    document.getElementById('startScreen').style.display = 'none';
-    document.getElementById('mainCard').style.display = 'block';
-    document.getElementById('mainCard').focus();
+    startExperience();
   }
+});
+window.addEventListener('click', () => {
+  startExperience();
 });
 </script>
 
