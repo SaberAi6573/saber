@@ -7,6 +7,10 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
+  body, .social-link, .social-link:hover, .social-link:focus {
+    cursor: none !important;
+  }
+
   body {
     margin: 0;
     padding: 0;
@@ -18,20 +22,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: none;
     background-color: #000;
   }
 
   .custom-cursor {
-    width: 15px;
-    height: 15px;
-    background: #0ff;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385841940251279450/my.png?ex=68578962&is=685637e2&hm=fb459b9c479bd33be7681d5d6e7fd94cd0587c9decec2af334ec207cb8342750&') no-repeat center center/contain;
     position: absolute;
     pointer-events: none;
     z-index: 9999;
     transition: transform 0.1s ease;
-    box-shadow: 0 0 10px #0ff;
+    filter: drop-shadow(0 0 5px #0ff);
   }
 
   .start-screen {
