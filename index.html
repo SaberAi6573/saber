@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TESTING WEB</title>
+<title>My Gamer Profile</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
@@ -25,7 +25,7 @@
   .custom-cursor {
     width: 40px;
     height: 40px;
-    background: url('https://media.discordapp.net/attachments/1381495592110526465/1385630860342202389/image.png?ex=6856c4cc&is=6855734c&hm=427272956e1296960888ac40022d8f442cd46f7648a22020b5c440333a378d8f&=&format=webp&quality=lossless&width=640&height=640.png') no-repeat center center/contain;
+    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385841940251279450/my.png?ex=685983a2&is=68583222&hm=d18f550488fb9e7111d88feb7af41f6fde248b4f410a96aaafa8cf7197fe5abd&.png') no-repeat center center/contain;
     position: absolute;
     pointer-events: none;
     z-index: 9999;
@@ -63,14 +63,14 @@
     background: rgba(0, 0, 0, 0.8);
     border: 2px solid #0ff;
     border-radius: 15px;
-    padding: 30px;
+    padding: 35px;
     box-shadow: 0 0 30px #0ff;
     text-align: center;
     animation: float 3s ease-in-out infinite;
     z-index: 2;
     display: none;
-    width: 90%;
-    max-width: 400px;
+    width: 95%;
+    max-width: 550px;
   }
 
   @keyframes float {
@@ -85,25 +85,42 @@
     text-shadow: 0 0 20px #0ff;
   }
 
-  .social-link {
-    display: block;
-    margin: 10px 0;
-    padding: 10px 15px;
-    background: transparent;
-    border: 2px solid #0ff;
-    border-radius: 10px;
-    color: #0ff;
-    text-decoration: none;
-    transition: background 0.3s, transform 0.3s;
+  .photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385852513781153863/e7b80a0dfdab85526e4c45919381da6d.jpg?ex=68598d7b&is=68583bfb&hm=3c48d0b55979808379e853b3e1b585b5b406d08679ea4373cb33db51b68147d3&') no-repeat center center/cover;
     box-shadow: 0 0 15px #0ff;
-    font-size: 1rem;
+    border: 2px solid #0ff;
   }
 
-  .social-link:hover, .social-link:focus {
-    background: #0ff;
-    color: #000;
-    transform: scale(1.05);
-    outline: none;
+  .social-icons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .social-icons a img {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 0 10px #0ff);
+    transition: transform 0.3s;
+  }
+
+  .social-icons a img:hover {
+    transform: scale(1.2);
+    animation: blossom 1s ease;
+  }
+
+  @keyframes blossom {
+    0% { transform: scale(1.2) rotate(0deg); }
+    50% { transform: scale(1.4) rotate(10deg); }
+    100% { transform: scale(1.2) rotate(0deg); }
   }
 
   .fps {
@@ -126,10 +143,6 @@
     .card h1 {
       font-size: 1.5rem;
     }
-    .social-link {
-      font-size: 0.9rem;
-      padding: 8px 12px;
-    }
     .start-text {
       font-size: 1.5rem;
       padding: 0 10px;
@@ -148,13 +161,18 @@
 <div class="fps" id="fpsCounter">FPS: --</div>
 
 <div class="start-screen" id="startScreen">
-  <div class="start-text">Press ENTER to Start</div>
+  <div class="start-text">Press ENTER or Click/Tap to Start</div>
 </div>
 
 <div class="card" id="mainCard" tabindex="0">
   <h1>Welcome to My Domain</h1>
-  <a href="https://discord.com/yourdiscord" target="_blank" class="social-link" tabindex="1">Join my Discord</a>
-  <a href="https://instagram.com/yourinstagram" target="_blank" class="social-link" tabindex="2">Follow me on Instagram</a>
+  <div class="photo"></div>
+  <div class="social-icons">
+    <a href="https://discord.com/yourdiscord" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
+    <a href="https://instagram.com/yourinstagram" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+    <a href="https://youtube.com/yourchannel" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
+    <a href="https://x.com/yourhandle" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" alt="X"></a>
+  </div>
 </div>
 
 <script>
@@ -164,29 +182,37 @@ document.addEventListener('mousemove', e => {
   cursor.style.top = e.pageY + 'px';
 });
 
-// Sparkle click effect
-document.addEventListener('click', e => {
-  const sparkle = document.createElement('div');
-  sparkle.style.position = 'absolute';
-  sparkle.style.width = '15px';
-  sparkle.style.height = '15px';
-  sparkle.style.borderRadius = '50%';
-  sparkle.style.background = '#0ff';
-  sparkle.style.left = e.pageX + 'px';
-  sparkle.style.top = e.pageY + 'px';
-  sparkle.style.opacity = 1;
-  sparkle.style.transition = 'all 0.6s ease';
-  document.body.appendChild(sparkle);
+function createFlower(x, y) {
+  const flower = document.createElement('div');
+  flower.style.position = 'absolute';
+  flower.style.left = `${x - 10}px`;
+  flower.style.top = `${y - 10}px`;
+  flower.style.width = '20px';
+  flower.style.height = '20px';
+  flower.style.borderRadius = '50%';
+  flower.style.background = 'radial-gradient(circle, #0ff 0%, #004d4d 100%)';
+  flower.style.pointerEvents = 'none';
+  flower.style.opacity = 1;
+  flower.style.transition = 'all 0.8s ease-out';
+  document.body.appendChild(flower);
   setTimeout(() => {
-    sparkle.style.transform = 'scale(3)';
-    sparkle.style.opacity = 0;
+    flower.style.transform = 'scale(3)';
+    flower.style.opacity = 0;
   }, 10);
-  setTimeout(() => {
-    document.body.removeChild(sparkle);
-  }, 600);
+  setTimeout(() => document.body.removeChild(flower), 800);
+}
+
+document.addEventListener('click', e => {
+  createFlower(e.pageX, e.pageY);
 });
 
-// FPS Counter
+document.addEventListener('touchstart', e => {
+  if(e.touches.length > 0) {
+    const touch = e.touches[0];
+    createFlower(touch.pageX, touch.pageY);
+  }
+});
+
 let lastFrame = performance.now();
 let fpsCounter = document.getElementById('fpsCounter');
 function updateFPS() {
@@ -198,14 +224,19 @@ function updateFPS() {
 }
 updateFPS();
 
-// Press Start text hide on ENTER
-window.addEventListener('keydown', (e) => {
-  if(e.key === 'Enter') {
+function startExperience() {
+  setTimeout(() => {
     document.getElementById('startScreen').style.display = 'none';
     document.getElementById('mainCard').style.display = 'block';
     document.getElementById('mainCard').focus();
-  }
+  }, 2000);
+}
+
+window.addEventListener('keydown', e => {
+  if(e.key === 'Enter') startExperience();
 });
+window.addEventListener('click', startExperience);
+window.addEventListener('touchstart', startExperience);
 </script>
 
 </body>
