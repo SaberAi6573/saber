@@ -43,7 +43,7 @@
     align-items: center;
     flex-direction: column;
     z-index: 10000;
-    animation: fadeIn 2s ease;
+    animation: fadeIn 0.25s ease; /* Changed from 2s to 0.25s */
   }
 
   .start-text {
@@ -110,8 +110,8 @@
   }
 
   .social-icons a img {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* Changed from 40px to 50px */
+    height: 50px; /* Changed from 40px to 50px */
     filter: drop-shadow(0 0 10px #f00);
     transition: transform 0.3s;
   }
@@ -150,6 +150,10 @@
     .start-text {
       font-size: 1.5rem;
       padding: 0 10px;
+    }
+    .social-icons a img {
+      width: 40px; /* Adjusted for mobile */
+      height: 40px; /* Adjusted for mobile */
     }
   }
 </style>
@@ -233,7 +237,7 @@ function startExperience() {
     document.getElementById('startScreen').style.display = 'none';
     document.getElementById('mainCard').style.display = 'block';
     document.getElementById('mainCard').focus();
-  }, 2000);
+  }, 250); // Changed from 2000ms to 250ms (0.25s)
 }
 
 window.addEventListener('keydown', e => {
