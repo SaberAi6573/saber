@@ -43,7 +43,7 @@
     align-items: center;
     flex-direction: column;
     z-index: 10000;
-    animation: fadeIn 0.25s ease; /* Changed from 2s to 0.25s */
+    animation: fadeIn 0.25s ease;
   }
 
   .start-text {
@@ -52,6 +52,50 @@
     text-shadow: 0 0 20px #f00;
     animation: float 3s ease-in-out infinite;
     text-align: center;
+    position: relative;
+  }
+
+  /* Glitch effect styles */
+  .glitch {
+    position: relative;
+  }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+  }
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #0ff;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+  }
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #f0f;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim-2 2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-anim-1 {
+    0% { clip: rect(32px, 9999px, 78px, 0); }
+    20% { clip: rect(8px, 9999px, 32px, 0); }
+    40% { clip: rect(64px, 9999px, 99px, 0); }
+    60% { clip: rect(12px, 9999px, 45px, 0); }
+    80% { clip: rect(88px, 9999px, 72px, 0); }
+    100% { clip: rect(1px, 9999px, 99px, 0); }
+  }
+  @keyframes glitch-anim-2 {
+    0% { clip: rect(90px, 9999px, 98px, 0); }
+    20% { clip: rect(3px, 9999px, 8px, 0); }
+    40% { clip: rect(67px, 9999px, 82px, 0); }
+    60% { clip: rect(23px, 9999px, 89px, 0); }
+    80% { clip: rect(12px, 9999px, 54px, 0); }
+    100% { clip: rect(78px, 9999px, 1px, 0); }
   }
 
   @keyframes fadeIn {
@@ -71,6 +115,41 @@
     display: none;
     width: 95%;
     max-width: 550px;
+    position: relative;
+  }
+
+  /* Glitch effect for card */
+  .card-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #f00;
+    border-radius: 15px;
+    box-shadow: 0 0 30px #f00;
+    z-index: -1;
+    opacity: 0;
+  }
+  .card-glitch:nth-child(1) {
+    transform: translate(-5px, -5px);
+    background: rgba(0, 255, 255, 0.1);
+    animation: glitch-card 0.5s infinite;
+  }
+  .card-glitch:nth-child(2) {
+    transform: translate(5px, 5px);
+    background: rgba(255, 0, 255, 0.1);
+    animation: glitch-card 0.5s infinite reverse;
+  }
+
+  @keyframes glitch-card {
+    0% { transform: translate(0); opacity: 0.5; }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(-5px, -5px); }
+    60% { transform: translate(5px, 5px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); opacity: 0; }
   }
 
   @keyframes float {
@@ -110,8 +189,8 @@
   }
 
   .social-icons a img {
-    width: 50px; /* Changed from 40px to 50px */
-    height: 50px; /* Changed from 40px to 50px */
+    width: 50px;
+    height: 50px;
     filter: drop-shadow(0 0 10px #f00);
     transition: transform 0.3s;
   }
@@ -152,8 +231,8 @@
       padding: 0 10px;
     }
     .social-icons a img {
-      width: 40px; /* Adjusted for mobile */
-      height: 40px; /* Adjusted for mobile */
+      width: 40px;
+      height: 40px;
     }
   }
 </style>
@@ -169,10 +248,12 @@
 <div class="fps" id="fpsCounter">FPS: --</div>
 
 <div class="start-screen" id="startScreen">
-  <div class="start-text">Press ENTER or Click/Tap to Start</div>
+  <div class="start-text glitch" data-text="Press ENTER or Click/Tap to Start">Press ENTER or Click/Tap to Start</div>
 </div>
 
 <div class="card" id="mainCard" tabindex="0">
+  <div class="card-glitch"></div>
+  <div class="card-glitch"></div>
   <h1>Welcome to My Domain</h1>
   <div class="photo"></div>
   <div class="social-icons">
@@ -233,11 +314,29 @@ function updateFPS() {
 updateFPS();
 
 function startExperience() {
+  // Add glitch effect to start screen
+  document.getElementById('startScreen').style.animation = 'none';
+  document.getElementById('startScreen').offsetHeight; // Trigger reflow
+  document.getElementById('startScreen').style.animation = 'fadeIn 0.25s ease';
+  
+  // Apply glitch effect before transition
+  document.querySelector('.start-text').classList.add('glitch-active');
+  
   setTimeout(() => {
     document.getElementById('startScreen').style.display = 'none';
     document.getElementById('mainCard').style.display = 'block';
+    
+    // Add initial glitch effect to card
+    const cardGlitches = document.querySelectorAll('.card-glitch');
+    cardGlitches.forEach(glitch => {
+      glitch.style.opacity = '0.7';
+      setTimeout(() => {
+        glitch.style.opacity = '0';
+      }, 500);
+    });
+    
     document.getElementById('mainCard').focus();
-  }, 250); // Changed from 2000ms to 250ms (0.25s)
+  }, 250);
 }
 
 window.addEventListener('keydown', e => {
