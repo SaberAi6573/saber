@@ -3,32 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TESTING WEB</title>
+<title>My Gamer Profile</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-
-  body, .social-link, .social-link:hover, .social-link:focus, .social-icons a {
-    cursor: none !important;
-  }
 
   body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385854291213815808/pinterestdownloader.com-1681513210.954071.gif?ex=685794e2&is=68564362&hm=25f0aa1b66fb41b010622b97fc6e02e30f34cfa7e6cb7dd0d2ace9c15ddd1046&') no-repeat center center/cover;
+    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1381500205693800580/b4995090b30f9dec8aefa98003aca288.gif?ex=68563e54&is=6854ecd4&hm=0f248e814c6a013620882f25641351ad7f06d0ba497dc2816101647d8c183852&.gif') no-repeat center center/cover;
     overflow: hidden;
     font-family: 'Orbitron', sans-serif;
     color: #0ff;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: none;
     background-color: #000;
   }
 
   .custom-cursor {
     width: 40px;
     height: 40px;
-    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385841940251279450/my.png?ex=68578962&is=685637e2&hm=fb459b9c479bd33be7681d5d6e7fd94cd0587c9decec2af334ec207cb8342750&') no-repeat center center/contain;
+    background: url('https://media.discordapp.net/attachments/1381495592110526465/1385630860342202389/image.png?ex=6856c4cc&is=6855734c&hm=427272956e1296960888ac40022d8f442cd46f7648a22020b5c440333a378d8f&=&format=webp&quality=lossless&width=640&height=640png') no-repeat center center/contain;
     position: absolute;
     pointer-events: none;
     z-index: 9999;
@@ -54,6 +51,7 @@
     color: #0ff;
     text-shadow: 0 0 20px #0ff;
     animation: float 3s ease-in-out infinite;
+    text-align: center;
   }
 
   @keyframes fadeIn {
@@ -71,6 +69,8 @@
     animation: float 3s ease-in-out infinite;
     z-index: 2;
     display: none;
+    width: 90%;
+    max-width: 400px;
   }
 
   @keyframes float {
@@ -80,36 +80,30 @@
   }
 
   .card h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 20px;
     text-shadow: 0 0 20px #0ff;
   }
 
-  .photo {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+  .social-link {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 15px;
+    background: transparent;
     border: 2px solid #0ff;
-    box-shadow: 0 0 20px #0ff;
-    margin: 0 auto 20px;
-    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385852513781153863/e7b80a0dfdab85526e4c45919381da6d.jpg?ex=6857933b&is=685641bb&hm=f2de7b7b3e198b301d2060939a5969db052a038ed4a7db361436fc1bcb935e31&') no-repeat center center/cover;
+    border-radius: 10px;
+    color: #0ff;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 0 15px #0ff;
+    font-size: 1rem;
   }
 
-  .social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .social-icons a img {
-    width: 40px;
-    height: 40px;
-    filter: drop-shadow(0 0 10px #0ff);
-    transition: transform 0.3s;
-  }
-
-  .social-icons a img:hover {
-    transform: scale(1.2);
+  .social-link:hover, .social-link:focus {
+    background: #0ff;
+    color: #000;
+    transform: scale(1.05);
+    outline: none;
   }
 
   .fps {
@@ -124,12 +118,29 @@
     z-index: 1000;
     box-shadow: 0 0 10px #0ff;
   }
+
+  @media screen and (max-width: 600px) {
+    .card {
+      padding: 20px;
+    }
+    .card h1 {
+      font-size: 1.5rem;
+    }
+    .social-link {
+      font-size: 0.9rem;
+      padding: 8px 12px;
+    }
+    .start-text {
+      font-size: 1.5rem;
+      padding: 0 10px;
+    }
+  }
 </style>
 </head>
 <body>
 
 <audio autoplay loop>
-  <source src="music/audio.mp3" type="audio/mpeg">
+  <source src="your-genshin-style-music.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
@@ -137,18 +148,13 @@
 <div class="fps" id="fpsCounter">FPS: --</div>
 
 <div class="start-screen" id="startScreen">
-  <div class="start-text">Press ENTER or Click to Start</div>
+  <div class="start-text">Press ENTER to Start</div>
 </div>
 
 <div class="card" id="mainCard" tabindex="0">
   <h1>Welcome to My Domain</h1>
-  <div class="photo"></div>
-  <div class="social-icons">
-    <a href="https://discord.com/yourdiscord" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord"></a>
-    <a href="https://instagram.com/yourinstagram" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-    <a href="https://youtube.com/yourchannel" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
-    <a href="https://x.com/yourhandle" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670151.png" alt="Twitter/X"></a>
-  </div>
+  <a href="https://discord.com/yourdiscord" target="_blank" class="social-link" tabindex="1">Join my Discord</a>
+  <a href="https://instagram.com/yourinstagram" target="_blank" class="social-link" tabindex="2">Follow me on Instagram</a>
 </div>
 
 <script>
@@ -156,6 +162,28 @@ const cursor = document.getElementById('cursor');
 document.addEventListener('mousemove', e => {
   cursor.style.left = e.pageX + 'px';
   cursor.style.top = e.pageY + 'px';
+});
+
+// Sparkle click effect
+document.addEventListener('click', e => {
+  const sparkle = document.createElement('div');
+  sparkle.style.position = 'absolute';
+  sparkle.style.width = '15px';
+  sparkle.style.height = '15px';
+  sparkle.style.borderRadius = '50%';
+  sparkle.style.background = '#0ff';
+  sparkle.style.left = e.pageX + 'px';
+  sparkle.style.top = e.pageY + 'px';
+  sparkle.style.opacity = 1;
+  sparkle.style.transition = 'all 0.6s ease';
+  document.body.appendChild(sparkle);
+  setTimeout(() => {
+    sparkle.style.transform = 'scale(3)';
+    sparkle.style.opacity = 0;
+  }, 10);
+  setTimeout(() => {
+    document.body.removeChild(sparkle);
+  }, 600);
 });
 
 // FPS Counter
@@ -170,21 +198,13 @@ function updateFPS() {
 }
 updateFPS();
 
-// Function to hide start screen and show main card
-function startExperience() {
-  document.getElementById('startScreen').style.display = 'none';
-  document.getElementById('mainCard').style.display = 'block';
-  document.getElementById('mainCard').focus();
-}
-
-// Press Start text hide on ENTER or Mouse Click
+// Press Start text hide on ENTER
 window.addEventListener('keydown', (e) => {
   if(e.key === 'Enter') {
-    startExperience();
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('mainCard').style.display = 'block';
+    document.getElementById('mainCard').focus();
   }
-});
-window.addEventListener('click', () => {
-  startExperience();
 });
 </script>
 
