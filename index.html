@@ -240,6 +240,100 @@
     box-shadow: 0 0 10px var(--primary-color);
   }
 
+  /* Music player styles */
+  .music-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 10px 15px;
+    box-shadow: 0 0 15px var(--primary-color);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+  }
+
+  .music-player:hover {
+    box-shadow: 0 0 25px var(--primary-color);
+  }
+
+  .music-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .music-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 18px;
+    cursor: none;
+    text-shadow: var(--text-glow);
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .music-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+    transform: scale(1.1);
+  }
+
+  .music-btn:active {
+    transform: scale(0.95);
+  }
+
+  .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .volume-slider {
+    width: 80px;
+    -webkit-appearance: none;
+    height: 4px;
+    background: rgba(255, 0, 0, 0.3);
+    border-radius: 2px;
+    outline: none;
+    cursor: none;
+  }
+
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: none;
+    box-shadow: 0 0 5px var(--primary-color);
+  }
+
+  .volume-slider::-moz-range-thumb {
+    cursor: none;
+  }
+
+  .music-title {
+    font-size: 12px;
+    color: var(--primary-color);
+    text-shadow: var(--text-glow);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+
   /* Mobile-specific adjustments */
   @media (hover: none) {
     .custom-cursor {
@@ -251,6 +345,14 @@
     .social-icons a img {
       transform: scale(1.1); /* Slightly larger for touch */
     }
+    .music-player {
+      padding: 8px 12px;
+      bottom: 15px;
+      left: 15px;
+    }
+    .music-btn {
+      font-size: 20px;
+    }
   }
 
   /* Orientation-specific adjustments */
@@ -261,12 +363,16 @@
     .social-icons {
       gap: 25px;
     }
+    .music-player {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>
 </head>
 <body>
 
-<audio autoplay loop>
+<audio id="bgMusic" loop>
   <source src="music/audio.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
@@ -276,6 +382,17 @@
 
 <div class="start-screen" id="startScreen">
   <div class="start-text glitch" data-text="Press ENTER or Tap to Start">Press ENTER or Tap to Start</div>
+</div>
+
+<div class="music-player" id="musicPlayer">
+  <div class="music-title">Now Playing</div>
+  <div class="music-controls">
+    <button class="music-btn" id="playPauseBtn">▶</button>
+    <div class="volume-control">
+      <button class="music-btn" id="muteBtn">🔊</button>
+      <input type="range" min="0" max="1" step="0.01" value="0.5" class="volume-slider" id="volumeSlider">
+    </div>
+  </div>
 </div>
 
 <div class="card" id="mainCard" tabindex="0">
@@ -357,6 +474,56 @@ function updateFPS() {
 }
 updateFPS();
 
+// Music player functionality
+const bgMusic = document.getElementById('bgMusic');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const muteBtn = document.getElementById('muteBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+const musicPlayer = document.getElementById('musicPlayer');
+const musicTitle = document.querySelector('.music-title');
+
+// Set initial volume
+bgMusic.volume = volumeSlider.value;
+
+// Play/Pause button
+playPauseBtn.addEventListener('click', () => {
+  if (bgMusic.paused) {
+    bgMusic.play();
+    playPauseBtn.textContent = '❚❚';
+    musicTitle.textContent = 'Now Playing';
+  } else {
+    bgMusic.pause();
+    playPauseBtn.textContent = '▶';
+    musicTitle.textContent = 'Paused';
+  }
+});
+
+// Mute button
+muteBtn.addEventListener('click', () => {
+  bgMusic.muted = !bgMusic.muted;
+  muteBtn.textContent = bgMusic.muted ? '🔇' : '🔊';
+});
+
+// Volume slider
+volumeSlider.addEventListener('input', () => {
+  bgMusic.volume = volumeSlider.value;
+  bgMusic.muted = false;
+  muteBtn.textContent = '🔊';
+});
+
+// Custom cursor for volume slider
+volumeSlider.addEventListener('mouseenter', () => {
+  if (!isTouchDevice) {
+    cursor.style.transform = 'scale(1.5)';
+  }
+});
+
+volumeSlider.addEventListener('mouseleave', () => {
+  if (!isTouchDevice) {
+    cursor.style.transform = 'scale(1)';
+  }
+});
+
 // Start experience function
 function startExperience() {
   // Add glitch effect to start screen
@@ -378,6 +545,13 @@ function startExperience() {
         glitch.style.opacity = '0';
       }, 500);
     });
+    
+    // Start music automatically
+    bgMusic.play().catch(e => {
+      console.log('Autoplay prevented, please interact to play');
+      musicTitle.textContent = 'Click to Play';
+    });
+    playPauseBtn.textContent = '❚❚';
     
     mainCard.focus();
   }, 250);
@@ -405,6 +579,21 @@ document.addEventListener('touchend', function(event) {
   }
   lastTouchEnd = now;
 }, false);
+
+// Add hover effect to music player buttons
+const musicBtns = document.querySelectorAll('.music-btn');
+musicBtns.forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    if (!isTouchDevice) {
+      cursor.style.transform = 'scale(1.5)';
+    }
+  });
+  btn.addEventListener('mouseleave', () => {
+    if (!isTouchDevice) {
+      cursor.style.transform = 'scale(1)';
+    }
+  });
+});
 </script>
 
 </body>
