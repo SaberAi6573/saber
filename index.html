@@ -273,7 +273,7 @@
     height: clamp(120px, 30vw, 180px);
     border-radius: 50%;
     margin: 0 auto 20px;
-    background: url('https://i.imgur.com/cyberpunk-avatar.jpg') no-repeat center center/cover;
+    background: url('https://cdn.discordapp.com/attachments/1381495592110526465/1385852513781153863/e7b80a0dfdab85526e4c45919381da6d.jpg?ex=6867653b&is=686613bb&hm=d90b1c1dcdb422078177fc0ef164a0614aefb79d8aeb8337e48828b1ec970c34&.png') no-repeat center center/cover;
     box-shadow: 0 0 20px var(--primary-color);
     border: 2px solid var(--primary-color);
     position: relative;
@@ -550,6 +550,33 @@
     50% { opacity: 0; }
   }
 
+  /* Matrix code effect */
+  .matrix-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .matrix-container.active {
+    opacity: 0.7;
+  }
+
+  .matrix-column {
+    position: absolute;
+    top: 0;
+    font-family: 'Courier New', monospace;
+    color: var(--secondary-color);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    text-shadow: 0 0 5px var(--secondary-color);
+  }
+
   /* Mobile-specific adjustments */
   @media (hover: none) {
     .custom-cursor {
@@ -586,17 +613,6 @@
   }
 
   /* Special effects for interactive elements */
-  .matrix-code {
-    position: absolute;
-    color: var(--secondary-color);
-    font-family: 'Courier New', monospace;
-    white-space: pre;
-    opacity: 0.7;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  /* Cyberpunk-style button */
   .cyber-button {
     position: relative;
     background: transparent;
@@ -633,21 +649,20 @@
     text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
   }
 
-  /* Cyberpunk-style input */
-  .cyber-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--primary-color);
+  .cyber-button.active {
     color: var(--secondary-color);
-    padding: 5px 10px;
-    font-family: 'Rajdhani', sans-serif;
-    outline: none;
-    transition: all 0.3s ease;
+    text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
   }
 
-  .cyber-input:focus {
-    border-bottom-color: var(--secondary-color);
-    box-shadow: 0 1px 0 0 var(--secondary-color);
+  .cyber-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--secondary-color);
+    animation: pulse 1.5s infinite;
   }
 </style>
 </head>
@@ -662,6 +677,7 @@
 <div class="scanlines"></div>
 <div class="particles" id="particles"></div>
 <div class="cyber-rain" id="cyberRain"></div>
+<div class="matrix-container" id="matrixContainer"></div>
 
 <div class="custom-cursor" id="cursor"></div>
 <div class="fps" id="fpsCounter">SYSTEM STATUS: -- FPS</div>
@@ -1017,6 +1033,94 @@ interactiveElements.forEach(el => {
   });
 });
 
+// Matrix effect variables
+let matrixActive = false;
+const matrixContainer = document.getElementById('matrixContainer');
+const matrixBtn = document.getElementById('matrixBtn');
+const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+let matrixColumns = [];
+let matrixAnimationId = null;
+
+// Create matrix columns
+function createMatrixColumns() {
+  matrixContainer.innerHTML = '';
+  matrixColumns = [];
+  
+  const columnCount = Math.floor(window.innerWidth / 20);
+  
+  for (let i = 0; i < columnCount; i++) {
+    const column = document.createElement('div');
+    column.className = 'matrix-column';
+    column.style.left = `${i * 20}px`;
+    column.style.fontSize = `${Math.random() * 10 + 12}px`;
+    column.style.animationDuration = `${Math.random() * 2 + 2}s`;
+    matrixContainer.appendChild(column);
+    
+    matrixColumns.push({
+      element: column,
+      chars: [],
+      speed: Math.random() * 2 + 1,
+      length: Math.floor(Math.random() * 15) + 10,
+      nextCharTime: 0
+    });
+  }
+}
+
+// Update matrix animation
+function updateMatrix(timestamp) {
+  if (!matrixActive) return;
+  
+  matrixColumns.forEach(column => {
+    if (timestamp > column.nextCharTime) {
+      // Add new character
+      const newChar = {
+        char: chars[Math.floor(Math.random() * chars.length)],
+        opacity: 1,
+        y: 0
+      };
+      column.chars.unshift(newChar);
+      
+      // Remove old characters
+      if (column.chars.length > column.length) {
+        column.chars.pop();
+      }
+      
+      // Update character positions and opacities
+      let columnText = '';
+      column.chars.forEach((char, index) => {
+        char.y += column.speed;
+        char.opacity = index / column.chars.length;
+        columnText += `<span style="opacity:${char.opacity}">${char.char}</span>`;
+      });
+      
+      column.element.innerHTML = columnText;
+      column.nextCharTime = timestamp + 100;
+    }
+  });
+  
+  matrixAnimationId = requestAnimationFrame(updateMatrix);
+}
+
+// Toggle matrix effect
+function toggleMatrix() {
+  matrixActive = !matrixActive;
+  
+  if (matrixActive) {
+    matrixContainer.classList.add('active');
+    createMatrixColumns();
+    matrixAnimationId = requestAnimationFrame(updateMatrix);
+    matrixBtn.classList.add('active');
+    matrixBtn.textContent = 'MATRIX ACTIVE';
+  } else {
+    matrixContainer.classList.remove('active');
+    if (matrixAnimationId) {
+      cancelAnimationFrame(matrixAnimationId);
+    }
+    matrixBtn.classList.remove('active');
+    matrixBtn.textContent = 'ACTIVATE MATRIX';
+  }
+}
+
 // Start experience function with cyberpunk effects
 function startExperience() {
   // Add glitch effect to start screen
@@ -1032,9 +1136,6 @@ function startExperience() {
   // Add transition effect
   setTimeout(() => {
     startScreen.style.opacity = '0';
-    
-    // Create matrix code effect during transition
-    createMatrixEffect();
     
     setTimeout(() => {
       startScreen.style.display = 'none';
@@ -1060,104 +1161,8 @@ function startExperience() {
   }, 250);
 }
 
-// Matrix code effect
-function createMatrixEffect() {
-  const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
-  const container = document.createElement('div');
-  container.className = 'matrix-code';
-  container.style.top = '0';
-  container.style.left = '0';
-  container.style.width = '100%';
-  container.style.height = '100%';
-  document.body.appendChild(container);
-  
-  // Create columns of falling characters
-  const columnCount = Math.floor(window.innerWidth / 20);
-  const columns = [];
-  
-  for (let i = 0; i < columnCount; i++) {
-    const column = {
-      x: i * 20,
-      y: -Math.random() * 100,
-      speed: Math.random() * 2 + 1,
-      chars: [],
-      length: Math.floor(Math.random() * 10) + 5
-    };
-    columns.push(column);
-    
-    // Create initial characters
-    for (let j = 0; j < column.length; j++) {
-      column.chars.push({
-        char: chars[Math.floor(Math.random() * chars.length)],
-        y: column.y + j * 20,
-        opacity: j / column.length
-      });
-    }
-  }
-  
-  // Animation loop
-  let startTime = Date.now();
-  const duration = 2000;
-  
-  function animate() {
-    const elapsed = Date.now() - startTime;
-    const progress = elapsed / duration;
-    
-    if (progress < 1) {
-      // Update and render columns
-      let matrixText = '';
-      columns.forEach(column => {
-        column.y += column.speed;
-        
-        // Add new character at top
-        if (column.y > -20) {
-          column.chars.unshift({
-            char: chars[Math.floor(Math.random() * chars.length)],
-            y: column.y - 20,
-            opacity: 0
-          });
-          
-          // Remove character at bottom
-          if (column.chars.length > column.length) {
-            column.chars.pop();
-          }
-        }
-        
-        // Update opacities
-        column.chars.forEach((char, index) => {
-          char.opacity = Math.min(1, char.opacity + 0.1);
-          if (index === column.chars.length - 1) {
-            char.opacity = char.opacity * 0.9;
-          }
-        });
-        
-        // Build column text
-        column.chars.forEach(char => {
-          matrixText += `<span style="position:absolute;left:${column.x}px;top:${char.y}px;opacity:${char.opacity};">${char.char}</span>`;
-        });
-      });
-      
-      container.innerHTML = matrixText;
-      requestAnimationFrame(animate);
-    } else {
-      // Remove matrix effect
-      document.body.removeChild(container);
-    }
-  }
-  
-  animate();
-}
-
-// Matrix button effect
-document.getElementById('matrixBtn').addEventListener('click', function() {
-  createMatrixEffect();
-  this.textContent = 'MATRIX ACTIVATED';
-  this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
-  setTimeout(() => {
-    this.textContent = 'ACTIVATE MATRIX';
-    this.style.color = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
-  }, 2000);
-});
+// Matrix button event listener
+matrixBtn.addEventListener('click', toggleMatrix);
 
 // Start event listeners
 window.addEventListener('keydown', e => {
@@ -1186,6 +1191,9 @@ document.addEventListener('touchend', function(event) {
 window.addEventListener('resize', () => {
   createParticles();
   createCyberRain();
+  if (matrixActive) {
+    createMatrixColumns();
+  }
 });
 
 // Initialize with particles even before start
